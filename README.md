@@ -4,7 +4,7 @@
 
 Members' music listening for [Flarum](https://flarum.org) 2. Free and MIT licensed.
 
-Members connect their own **Last.fm** account. Last.fm already tracks Spotify, Apple Music, YouTube Music and more (built-in connections, or the Web Scrobbler browser extension), so one connection covers almost everything people listen on.
+Members connect their own **Last.fm** account. Spotify sends plays to Last.fm through a built-in connection. Apple Music and YouTube Music need a scrobbler: an app on the phone or Mac, or the Web Scrobbler browser extension, which also covers SoundCloud, Bandcamp and other web players. Apple Music has no built-in Last.fm connection and no usable API for listening history, so a scrobbler is the only way to include it.
 
 ![A member's music tab](screenshots/profile.jpg)
 
