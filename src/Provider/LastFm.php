@@ -90,6 +90,17 @@ class LastFm implements ListeningProvider
             }
         }
 
+        // A first poll with nothing in the last two weeks still shows the
+        // member's latest plays, however old: for display, never counted.
+        if ($since === null && ! $recent && ! $nowPlaying) {
+            $latest = $this->call(['method' => 'user.getRecentTracks', 'user' => $account, 'limit' => 10]);
+            foreach ($this->items($latest['recenttracks']['track'] ?? []) as $item) {
+                if (($track = $this->track($item)) && isset($item['date']['uts']) && count($recent) < 10) {
+                    $recent[] = ['artist' => $track['artist'], 'title' => $track['title'], 'url' => $track['url'], 'playedAt' => CarbonImmutable::createFromTimestamp((int) $item['date']['uts'])->toIso8601String()];
+                }
+            }
+        }
+
         /*
          * A backlog bigger than one poll takes is read from its OLDEST end, so
          * the stored-up-to mark only ever moves past plays that were stored.

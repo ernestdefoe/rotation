@@ -103,6 +103,16 @@ class PollerTest extends RotationTestCase
     }
 
     #[Test]
+    public function a_new_connection_with_nothing_recent_is_checked_again_soon(): void
+    {
+        $this->connect(2, 'normal');
+        $this->poll(2);
+
+        $next = CarbonImmutable::parse($this->db()->table('rotation_accounts')->where('user_id', 2)->value('next_poll_at'), 'UTC');
+        $this->assertTrue($next->lte(CarbonImmutable::now('UTC')->addMinutes(16)));
+    }
+
+    #[Test]
     public function a_hidden_lastfm_profile_is_marked_and_checked_daily(): void
     {
         $this->connect(2, 'normal');

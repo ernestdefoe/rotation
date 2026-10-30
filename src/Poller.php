@@ -98,7 +98,7 @@ class Poller
             'last_error' => null,
             'last_polled_at' => $now->toDateTimeString(),
             'last_played_at' => $last?->toDateTimeString(),
-            'next_poll_at' => $now->addMinutes($this->interval($listening, $last, (int) $account->user_id))->toDateTimeString(),
+            'next_poll_at' => $now->addMinutes($this->interval($listening, $last, (int) $account->user_id, $account->created_at))->toDateTimeString(),
         ] + ($tops !== null ? ['tops_at' => $now->toDateTimeString()] : []));
 
         $this->snapshot((int) $account->user_id, $listening, $tops);
@@ -182,7 +182,7 @@ class Poller
     }
 
     /** Minutes until this account is polled again. */
-    private function interval(Listening $listening, ?CarbonImmutable $last, int $userId): int
+    private function interval(Listening $listening, ?CarbonImmutable $last, int $userId, ?string $connectedAt): int
     {
         if ($listening->more) {
             return 1;
@@ -192,6 +192,12 @@ class Poller
         }
 
         $now = CarbonImmutable::now('UTC');
+
+        // Just connected: someone trying it out sees their next play soon.
+        if ($connectedAt && CarbonImmutable::parse($connectedAt, 'UTC')->gt($now->subDay())) {
+            return 15;
+        }
+
         $seen = $this->db->table('users')->where('id', $userId)->value('last_seen_at');
         if (! $seen || CarbonImmutable::parse($seen, 'UTC')->lt($now->subDays(30))) {
             return 24 * 60;
