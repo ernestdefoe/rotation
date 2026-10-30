@@ -2,6 +2,17 @@
 // themes and dark mode carry over; links and headings set theirs explicitly
 // because themes recolour both.
 
+// 🚨 Themes recolour every link with selectors up to (0,3,1) — Bespoke's is
+// `:root:not([data-theme^="dark"]) a:not(.Button)` — so Rotation's own links
+// repeat their class to stay above that, whatever order the CSS loads in.
+.rotation-link(@color) {
+  &,
+  &:hover,
+  &:focus {
+    color: @color;
+  }
+}
+
 .RotationPlayer {
   display: block;
   max-width: 560px;
@@ -109,10 +120,10 @@
     object-fit: cover;
   }
 
-  a,
-  a:hover {
-    color: var(--text-color);
-  }
+}
+
+.RotationList.RotationList.RotationList a:not(.Button) {
+  .rotation-link(var(--text-color));
 }
 
 .RotationAvatar {
@@ -188,10 +199,10 @@
   margin-top: 4px;
   font-size: 13px;
 
-  &,
-  &:hover {
-    color: var(--primary-color);
-  }
+}
+
+.RotationWidget.RotationWidget .RotationWidget-more:not(.Button) {
+  .rotation-link(var(--primary-color));
 }
 
 // Profile → Music.
@@ -262,11 +273,11 @@
   font-size: 18px;
   font-weight: 700;
   overflow-wrap: anywhere;
+}
 
-  a,
-  a:hover {
-    color: var(--text-color);
-  }
+.RotationNow.RotationNow .RotationNow-title a:not(.Button),
+.RotationRecent.RotationRecent.RotationRecent a:not(.Button) {
+  .rotation-link(var(--text-color));
 }
 
 .RotationNow-artist {
@@ -360,11 +371,6 @@
     padding: 6px 0;
     border-bottom: 1px solid var(--control-bg);
   }
-
-  a,
-  a:hover {
-    color: var(--text-color);
-  }
 }
 
 .RotationRecent-track {
@@ -384,12 +390,11 @@
   margin: 0;
   font-size: 13px;
   color: var(--muted-color);
+}
 
-  a,
-  a:hover {
-    color: var(--muted-color);
-    text-decoration: underline;
-  }
+.RotationCredit.RotationCredit.RotationCredit a:not(.Button) {
+  .rotation-link(var(--muted-color));
+  text-decoration: underline;
 }
 
 .RotationSettings {
