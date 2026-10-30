@@ -68,6 +68,18 @@ class ConnectTest extends RotationTestCase
     }
 
     #[Test]
+    public function connect_attempts_are_limited(): void
+    {
+        for ($i = 0; $i < 10; $i++) {
+            $this->start();
+        }
+
+        $response = $this->send($this->request('GET', '/rotation/connect/lastfm', ['authenticatedAs' => 2]));
+
+        $this->assertStringContainsString('rotation=failed', $response->getHeaderLine('Location'));
+    }
+
+    #[Test]
     public function a_guest_cannot_start(): void
     {
         $response = $this->send($this->request('GET', '/rotation/connect/lastfm'));

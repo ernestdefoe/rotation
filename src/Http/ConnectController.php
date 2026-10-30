@@ -4,7 +4,10 @@ namespace Ernestdefoe\Rotation\Http;
 
 use Ernestdefoe\Rotation\Provider\Providers;
 use Flarum\Http\RequestUtil;
+use Flarum\Http\SlugManager;
 use Flarum\Http\UrlGenerator;
+use Flarum\User\User;
+use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Laminas\Diactoros\Response\RedirectResponse;
@@ -23,7 +26,7 @@ class ConnectController implements RequestHandlerInterface
 {
     public const STATE = 'rotation.connect';
 
-    public function __construct(private Providers $providers, private UrlGenerator $url)
+    public function __construct(private Providers $providers, private UrlGenerator $url, private Cache $cache, private SlugManager $slugs)
     {
     }
 
@@ -37,6 +40,13 @@ class ConnectController implements RequestHandlerInterface
         $provider = $this->providers->get($key);
         if (! $provider || ! $provider->configured()) {
             return new RedirectResponse($this->url->to('forum')->base());
+        }
+
+        // Each try ends in a Last.fm request: ten an hour per member is plenty.
+        $tries = "rotation.connect.{$actor->id}";
+        $this->cache->add($tries, 0, 3600);
+        if ((int) $this->cache->increment($tries) > 10) {
+            return new RedirectResponse($this->url->to('forum')->route('rotation.user', ['username' => $this->slugs->forResource(User::class)->toSlug($actor)]).'?rotation=failed');
         }
 
         $state = Str::random(40);

@@ -27,6 +27,6 @@ return Migration::createTable('rotation_accounts', function (Blueprint $table) {
     $table->unique(['user_id', 'provider']);
     // One forum account per Last.fm account, or two people's charts count it twice.
     $table->unique(['provider', 'external_name']);
-    $table->index(['status', 'next_poll_at']);
+    $table->index('next_poll_at');
     $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
 });

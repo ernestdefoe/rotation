@@ -17,6 +17,7 @@ return Migration::createTable('rotation_plays', function (Blueprint $table) {
     $table->unique(['user_id', 'track_id', 'played_at']);
     $table->index(['user_id', 'played_at']);
     $table->index('played_at');
+    $table->index('track_id');
     $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
     $table->foreign('track_id')->references('id')->on('rotation_tracks')->cascadeOnDelete();
 });

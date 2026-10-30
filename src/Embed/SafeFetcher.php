@@ -31,7 +31,8 @@ class SafeFetcher
             return null;
         }
 
-        $ip = $this->publicAddress($host);
+        // The pin below is a curl option: without curl there is no pin, so no fetch.
+        $ip = function_exists('curl_init') ? $this->publicAddress($host) : null;
         if ($ip === null) {
             return null;
         }
@@ -77,7 +78,8 @@ class SafeFetcher
         $ips = array_values(array_filter(array_map(fn ($r) => $r['ip'] ?? $r['ipv6'] ?? null, $records)));
 
         foreach ($ips as $ip) {
-            if (! filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+            // GLOBAL_RANGE also rules out CGNAT, documentation and IPv4-mapped IPv6 addresses.
+            if (! filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_GLOBAL_RANGE | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
                 return null;
             }
         }
