@@ -6,6 +6,8 @@ Members' music listening for [Flarum](https://flarum.org) 2. Free and MIT licens
 
 Members connect their own **Last.fm** account. Last.fm already tracks Spotify, Apple Music, YouTube Music and more (built-in connections, or the Web Scrobbler browser extension), so one connection covers almost everything people listen on.
 
+![A member's music tab](screenshots/profile.jpg)
+
 ## Features
 
 - **Music tab on profiles**: what the member is playing now, listening time, plays this week, top songs and artists (last 30 days and all time) and recently played.
@@ -16,6 +18,14 @@ Members connect their own **Last.fm** account. Last.fm already tracks Spotify, A
 - **Players for music links**: a Spotify, Apple Music, YouTube / YouTube Music, SoundCloud, Deezer, TIDAL, Bandcamp, Audiomack or Mixcloud link pasted on its own line becomes a player. Works with Flarum's editor, Markdown and Scribe.
 - **Weekly recap**: "Your week in music", as a notification and optionally an email. Members turn it on or off in their notification settings.
 - **GDPR**: with `flarum/gdpr`, listening data is in the member's export and is erased with their account. Disconnecting deletes it straight away.
+
+## Screenshots
+
+| | |
+|---|---|
+| ![Music charts](screenshots/charts.jpg) | ![Players for music links](screenshots/players.jpg) |
+| ![Now playing in the sidebar](screenshots/now-playing-sidebar.jpg) | ![A member's own settings](screenshots/settings.jpg) |
+| ![Dark mode](screenshots/profile-dark.jpg) | ![Admin settings and level bands](screenshots/admin.jpg) |
 
 ## How listening time works
 

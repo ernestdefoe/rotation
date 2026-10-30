@@ -137,7 +137,7 @@ export default class MusicPage extends UserPage {
             <div className="RotationStat-label">{p('stats.level')}</div>
             <div className="RotationStat-value">
               {t('level', { level: level.level })}
-              {level.name ? <span className="RotationStat-name"> · {level.name}</span> : null}
+              {level.name ? <span className="RotationStat-name">{level.name}</span> : null}
             </div>
             {next ? (
               <>
